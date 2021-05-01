@@ -6,22 +6,20 @@
             <v-spacer></v-spacer>
              <v-toolbar-title class="justify-center">Widow Fletcher AV Control App</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <DialogAdminLogIn />
-                <!-- <DialogIpAddress /> -->
-            
+                <DialogIpAddress />  
         </v-app-bar>
-
-
-
     </nav>
+    
 </template>
 
 <script>
 
-import DialogAdminLogIn from '@/components/DialogAdminLogIn'
+
+
+import DialogIpAddress from '@/components/DialogIpAddress'
 export default {
     components: {
-            DialogAdminLogIn
+            DialogIpAddress
         },
     data: () => ({
 
