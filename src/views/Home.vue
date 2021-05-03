@@ -1,6 +1,6 @@
 <template>
    <div class="home">
-
+     
       <v-container>
       <div class= "d-flex justify-center" > 
           <v-img 
@@ -39,8 +39,8 @@
             <v-divider></v-divider>
              
             <v-list nav  >
-                <v-list-item v-for= "(item,index) in videoInputs" :key= "index" >
-                    <v-list-item-icon ><v-icon> mdi-import</v-icon></v-list-item-icon>
+                <v-list-item @click= "switchAll(index)"  v-for= "(item,index) in videoInputs" :key= "index" >
+                    <v-list-item-icon><v-icon> mdi-import</v-icon></v-list-item-icon>
                     <v-list-item-content >{{item}} </v-list-item-content>
                 </v-list-item>
             </v-list>
@@ -52,27 +52,84 @@
 </template>
 
 <script>
-
+import axios from 'axios';
 export default {
    name: 'Home',
    props:['zoneInfo','videoInputs'],
    data: () => ({
-    leftDrawer: false
+    nodeRedUrl: `192.168.1.89:1880`,
+    leftDrawer: false,
+    zoneSelected:0,
+    switch1RXPorts :[],
+    switch2RXPorts :[],
   }),
+  computed: {
+    // a computed getter
+    getSwitch1RxPorts: function () {
+      let switch1RXPorts = [] //{switch1RxStart:, switch1RxEnd}
+      //Filter zoneInfo[] and output only switchUnit1 attributes
+      let switch1 = ((this.zoneInfo.filter(item => item.switchUnit == `1`)))
+      // Get switch1 start port, end port
+      switch1RXPorts.push( {'switch1RxStart': Math.min(...switch1.map((item)=>parseInt(item.portStart)))} )
+      switch1RXPorts.push( {'switch1RxEnd': Math.max(...switch1.map((item)=>parseInt(item.portEnd)))})
+      return (switch1RXPorts )
+    },
+    getSwitch2RxPorts: function () {
+      let switch2RXPorts = [] //{switch2RxStart:, switch2RxEnd}
+      //Filter zoneInfo[] and output only switchUnit2 attributes
+      // Get switch2 start port, end port
+      let switch2 = ((this.zoneInfo.filter(item => item.switchUnit == `2`)))
+      switch2RXPorts.push( {'switch2RxStart': Math.min(...switch2.map((item)=>parseInt(item.portStart)))} )
+      switch2RXPorts.push( {'switch2RxEnd': Math.max(...switch2.map((item)=>parseInt(item.portEnd)))})
+      return (switch2RXPorts )
+    }
+
+  },
 
   methods: {
-
    zoneSelect: function(_index) {
       let zoneSelected = _index
       this.$emit('zoneSelected', zoneSelected)
       this.$router.push('/zones')
-
+  
     },
     allSelect: function() {
        let zoneSelected = 'all'
        this.$emit('zoneSelected', zoneSelected)
        this.leftDrawer = true
     },
+    switchAll: function(_index){
+      
+      let vlan = _index + 2
+      // console.log(this.getSwitch1RxPorts)
+      // console.log(this.getSwitch1RxPorts[0].switch1RxStart)
+      // console.log(this.getSwitch1RxPorts[1].switch1RxEnd)
+      
+      // console.log(`http://${this.nodeRedUrl}/switchAll/switch-unit/1/gi-start/${this.getSwitch1RxPorts[0].switch1RxStart}/gi-end/${this.getSwitch1RxPorts[1].switch1RxEnd}/vlan/${vlan}`)
+      // console.log(`http://${this.nodeRedUrl}/switchAll/switch-unit/2/gi-start/${this.getSwitch2RxPorts[0].switch2RxStart}/gi-end/${this.getSwitch2RxPorts[1].switch2RxEnd}/vlan/${vlan}`)
+
+      axios.get(`http://${this.nodeRedUrl}/switchall-unit/1/start/${this.getSwitch1RxPorts[0].switch1RxStart}/end/${this.getSwitch1RxPorts[1].switch1RxEnd}/vlan/${vlan}`)
+      .then(function (response) {
+        // handle success
+        console.log(response);
+              })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+
+      axios.get(`http://${this.nodeRedUrl}/switchall-unit/2/start/${this.getSwitch2RxPorts[0].switch2RxStart}/end/${this.getSwitch2RxPorts[1].switch2RxEnd}/vlan/${vlan}`)
+      .then(function (response) {
+        // handle success
+        console.log(response);
+              })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+     
+         
+    }
 
   }
 }

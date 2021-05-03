@@ -2,20 +2,17 @@
    <div class="zones">
    
       <v-container>
-      <div class= "d-flex justify-center" > 
-          <!-- <v-img 
-              src = '../assets/widowFletchers.png'    
-              max-height="120"
-              max-width="120"
-              contain>
-          </v-img>  -->
-      
-      </div>  
+      <div id = 'zone-title' class= "mb-5"> 
+            <h1  class= "d-flex justify-center brown--text"> 
+               {{zoneInfo[zoneSelected].name}}
+            </h1>  
+        </div>
+
       <div >
-          <v-row justify= "start" >
+          <v-row id = "tv-buttons" justify= "start" >
               <v-col class= "d-flex justify-center  mb-3" cols = "4" sm ="2"  v-for="(item,index) in tvList" :key="index">
-                  <v-btn @click = "tvSelected(index)" large color= "primary">
-                      {{tvList[index]}}
+                  <v-btn @click = "tv(index)" large dark color= "brown lighten-1" >
+                        {{index+1}}
                   </v-btn>
         
               </v-col>
@@ -36,7 +33,7 @@
             <v-divider></v-divider>
              
             <v-list nav  >
-                <v-list-item v-for= "(item,index) in videoInputs" :key= "index" >
+                <v-list-item @click= "switchVideo(index)"  v-for= "(item,index) in videoInputs" :key= "index" >
                     <v-list-item-icon ><v-icon> mdi-import</v-icon></v-list-item-icon>
                     <v-list-item-content >{{item}} </v-list-item-content>
                 </v-list-item>
@@ -47,13 +44,14 @@
 </template>
 
 <script>
-
+import axios from 'axios';
 export default {
    name: 'Zones',
    props:['zoneInfo','zoneSelected','videoInputs'],
    data: () => ({
+      nodeRedUrl: `192.168.1.89:1880`,
       leftDrawer : false,
-      //videoInputs : ['dtv1','dtv2','apple tv']
+      tvSelected: 0 // TV selected from zone. 0= first TV in zone, 1= 2nd TV in zone...
   }),
 
   computed:{
@@ -70,15 +68,35 @@ export default {
 
   },
   methods: {
-   tvSelected: function(_index) {
+   tv: function(_index) {
       // Open Video Input Select Left Drawer
        this.leftDrawer = true
       // TV selected from zone. 0= first TV in zone, 1= 2nd TV in zone...
+       this.tvSelected = _index
       // Pass message to App.vue to Open Video Input Left Drawer. 
         this.$emit('tvSelectedIndex', _index)
     },
+    switchVideo: function(_index){
+     
+        let vlan = _index + 2
+        let switch_unit = this.zoneInfo[this.zoneSelected].switchUnit
+        let rxport = parseInt(this.zoneInfo[this.zoneSelected].portStart) + this.tvSelected
+        // console.log(`zoneSelected is ` , this.zoneSelected)
+        // console.log(`swich unit is ` ,switch_unit )
+        // console.log(`gi port is ` ,gi_port )
+        console.log(`http://${this.nodeRedUrl}/switch-unit/${switch_unit}/rxport/${rxport}/vlan/${vlan}`)
 
-    
+        axios.get(`http://${this.nodeRedUrl}/switch-unit/${switch_unit}/rxport/${rxport}/vlan/${vlan}`)
+        .then(function (response) {
+            // handle success
+            console.log(response);
+                })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+
+    }
 
   }
 }
@@ -89,12 +107,18 @@ export default {
 .zones{
   display:flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   width: 100%;
   height:65vh;
   /* border:1px solid red ; */
-
 }
+#zone-title{
+    /* border: 1px solid red */
+}
+#tv-buttons{
+    /* border: 1px solid blue */
+}
+
 
 
 

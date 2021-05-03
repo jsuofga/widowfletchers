@@ -6,7 +6,7 @@
     <v-dialog v-model="dialogLogin" width="600">
       <template v-slot:activator="{ on, attrs }">
         <v-btn depressed text v-bind="attrs" v-on="on" class = "left" >
-            <v-icon >mdi-account-cog</v-icon>Setting
+            <v-icon >mdi-cog</v-icon>
         </v-btn>
       </template>
 
