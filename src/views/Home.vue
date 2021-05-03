@@ -1,20 +1,21 @@
 <template>
    <div class="home">
 
-     <v-container>
-        <!-- <div class = "myRow"  > 
+      <v-container>
+      <div class= "d-flex justify-center" > 
           <v-img 
               src = '../assets/widowFletchers.png'    
-              max-height="80"
-              max-width="100"
+              max-height="120"
+              max-width="120"
               contain>
           </v-img> 
-      </div> -->
-      <div class = 'mt-5'>
+      
+      </div>  
+      <div >
           <v-row justify= "center" >
-              <v-col class= "d-flex justify-center" cols = "6" sm ="3"  v-for="(item,index) in zoneNamesToDisplay" :key="index">
-                  <div class = "roundBtn btn-large" >
-                    {{zoneNamesToDisplay[index]}}
+              <v-col class= "d-flex justify-center" cols = "6" sm ="3"  v-for="(item,index) in zoneInfo" :key="index">
+                  <div class = "roundBtn btn-large" @click= "zoneSelect(index)">
+                    {{zoneInfo[index].name}}
                   </div>
               </v-col>
               <v-col class= "d-flex justify-center"  cols = "6" sm ="3">
@@ -23,25 +24,14 @@
                      ALL
                   </div>
               </v-col>
-
-              <!-- <v-col class= "myColumn"  cols = "6" sm ="3" >1</v-col>
-              <v-col class= "myColumn"  cols = "6" sm ="3" >2</v-col>
-              <v-col class= "myColumn"  cols = "6" sm ="3" >3</v-col>
-              <v-col class= "myColumn"  cols = "6" sm ="3" >4</v-col>
-              <v-col class= "myColumn"  cols = "6" sm ="3" >5</v-col>
-              <v-col class= "myColumn"  cols = "6" sm ="3" >6</v-col>
-              <v-col class= "myColumn"  cols = "6" sm ="3" >7</v-col>
-              <v-col class= "myColumn"  cols = "6" sm ="3" >8</v-col> -->
           </v-row>
       </div>
-
-
-        
 
       <!-- <div class = "zone" >
           <div @click= "showZone(item,index)" class = "roundBtn btn-large" v-for="(item,index) in zoneNamesToDisplay" :key="index">{{zoneNamesToDisplay[index]}}</div>
           <div @click= "switchAll" class="roundBtn btn-large "><v-icon>mdi-all-inclusive</v-icon>  ALL</div>
      </div> -->
+
      </v-container>
 
   </div>
@@ -50,13 +40,21 @@
 <script>
 
 export default {
+   name: 'Home',
+   props:['zoneInfo'],
    data: () => ({
-     zoneNamesToDisplay: ['Den','Fletchers','Bar']
+    
   }),
 
   methods: {
-   test: function() {
-      
+   test:function(){
+     console.log(this.zoneInfo)
+   },
+   zoneSelect: function(_index) {
+      let zoneSelected = _index
+      this.$emit('zoneSelected', zoneSelected)
+      this.$router.push('/zones')
+
     },
 
   }
@@ -67,11 +65,10 @@ export default {
 <style scoped>
 .home{
   display:flex;
-  position:relative;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height:80vh;
+  height:65vh;
   /* border:1px solid red ; */
 
 }

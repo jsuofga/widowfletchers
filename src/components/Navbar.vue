@@ -11,12 +11,27 @@
                 <v-spacer></v-spacer>
                 <DialogIpAddress />  
         </v-app-bar>
+
+        <v-bottom-navigation absolute  v-model="value" >
+            <v-btn value="home" router-link :to= " '/' " >
+                <span>Home</span>
+                <v-icon>mdi-home</v-icon>
+            </v-btn>
+            <!-- <v-btn value="favorites"  >
+                <span>Favorites</span>
+                <v-icon>mdi-heart</v-icon>
+            </v-btn>
+        
+            <v-btn value="nearby" >
+                <span>Nearby</span>
+                <v-icon>mdi-map-marker</v-icon>
+            </v-btn> -->
+        </v-bottom-navigation>
     </nav>
     
 </template>
 
 <script>
-
 
 
 import DialogIpAddress from '@/components/DialogIpAddress'
