@@ -12,8 +12,8 @@
                 <DialogIpAddress />  
         </v-app-bar>
 
-        <v-bottom-navigation absolute  v-model="value" >
-            <v-btn value="home" router-link :to= " '/' " >
+        <v-bottom-navigation absolute  >
+            <v-btn  router-link :to= " '/' " >
                 <span>Home</span>
                 <v-icon>mdi-home</v-icon>
             </v-btn>

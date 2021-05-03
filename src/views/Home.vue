@@ -14,11 +14,11 @@
       <div >
           <v-row justify= "center" >
               <v-col class= "d-flex justify-center" cols = "6" sm ="3"  v-for="(item,index) in zoneInfo" :key="index">
-                  <div class = "roundBtn btn-large" @click= "zoneSelect(index)">
+                  <div @click= "zoneSelect(index)" class = "roundBtn btn-large" >
                     {{zoneInfo[index].name}}
                   </div>
               </v-col>
-              <v-col class= "d-flex justify-center"  cols = "6" sm ="3">
+              <v-col @click= "allSelect" class= "d-flex justify-center"  cols = "6" sm ="3">
                   <div class = "roundBtn btn-large">
                     <v-icon>mdi-all-inclusive</v-icon> 
                      ALL
@@ -27,10 +27,24 @@
           </v-row>
       </div>
 
-      <!-- <div class = "zone" >
-          <div @click= "showZone(item,index)" class = "roundBtn btn-large" v-for="(item,index) in zoneNamesToDisplay" :key="index">{{zoneNamesToDisplay[index]}}</div>
-          <div @click= "switchAll" class="roundBtn btn-large "><v-icon>mdi-all-inclusive</v-icon>  ALL</div>
-     </div> -->
+
+     <v-navigation-drawer app temporary  v-model = "leftDrawer">
+            <div class= "d-flex flex-column align-center" >
+                <v-avatar size = '100'> 
+                    <v-icon color = 'primary' x-large>mdi-audio-video</v-icon>
+                </v-avatar>
+                <div class = "title ">Video Source Select</div>
+            </div>
+
+            <v-divider></v-divider>
+             
+            <v-list nav  >
+                <v-list-item v-for= "(item,index) in videoInputs" :key= "index" >
+                    <v-list-item-icon ><v-icon> mdi-import</v-icon></v-list-item-icon>
+                    <v-list-item-content >{{item}} </v-list-item-content>
+                </v-list-item>
+            </v-list>
+      </v-navigation-drawer>
 
      </v-container>
 
@@ -41,20 +55,23 @@
 
 export default {
    name: 'Home',
-   props:['zoneInfo'],
+   props:['zoneInfo','videoInputs'],
    data: () => ({
-    
+    leftDrawer: false
   }),
 
   methods: {
-   test:function(){
-     console.log(this.zoneInfo)
-   },
+
    zoneSelect: function(_index) {
       let zoneSelected = _index
       this.$emit('zoneSelected', zoneSelected)
       this.$router.push('/zones')
 
+    },
+    allSelect: function() {
+       let zoneSelected = 'all'
+       this.$emit('zoneSelected', zoneSelected)
+       this.leftDrawer = true
     },
 
   }
