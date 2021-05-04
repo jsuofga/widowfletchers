@@ -1,18 +1,20 @@
 <template>
 
     <nav>
-        <v-app-bar app flat >
-            <!-- <v-app-bar-nav-icon text  @click = "leftDrawer = !leftDrawer"></v-app-bar-nav-icon> -->
-     
-          
- 
-             <v-toolbar-title >Widow Fletcher </v-toolbar-title>
+        <v-app-bar app flat dark color ="brown lighten-1" >
+            <v-img 
+              src = '../assets/octava-logo-white.png'    
+              max-height="120"
+              max-width="120"
+              contain>
+          </v-img> 
+             <v-toolbar-title > </v-toolbar-title>
               
                 <v-spacer></v-spacer>
                 <DialogIpAddress />  
         </v-app-bar>
 
-        <v-bottom-navigation absolute  >
+        <v-bottom-navigation absolute color ="brown lighten-1"  >
             <v-btn  router-link :to= " '/' " >
                 <span>Home</span>
                 <v-icon>mdi-home</v-icon>

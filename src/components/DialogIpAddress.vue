@@ -20,6 +20,7 @@
                 v-model= "adminPass"
                 prepend-icon="mdi-account"
                 hide-details="auto"
+                autocomplete="false"       
               ></v-text-field>
             </div>
 
@@ -46,34 +47,18 @@
             </v-card-title>
             <v-form v-model="valid2" class = "mb-5">
               <v-container>
-            <v-row>
-                <v-col cols="12" md="3">
-                  <v-text-field v-model="switch1IP[0]" :rules="ipRules" label="Switch1 IP" required></v-text-field>
-                </v-col>
-                <v-col cols="12" md="3">
-                    <v-text-field v-model="switch1IP[1]" :rules="ipRules" label="Switch1 IP" required></v-text-field>
-                </v-col>
-                <v-col cols="12" md="3">
-                    <v-text-field v-model="switch1IP[2]" :rules="ipRules" label="Switch1 IP" required></v-text-field>
-                </v-col>
-                <v-col cols="12" md="3">
-                    <v-text-field v-model="switch1IP[3]" :rules="ipRules" label="Switch1 IP" required></v-text-field>
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-col cols="12" md="3">
-                    <v-text-field v-model="switch2IP[0]" :rules="ipRules" label="Switch2 IP" required></v-text-field>
-                </v-col>
-                <v-col cols="12" md="3">
-                    <v-text-field v-model="switch2IP[1]" :rules="ipRules" label="Switch2 IP" required></v-text-field>
-                  </v-col>
-                <v-col cols="12" md="3">
-                    <v-text-field v-model="switch2IP[2]" :rules="ipRules" label="Switch2 IP" required></v-text-field>
-                </v-col>
-                <v-col cols="12" md="3">
-                    <v-text-field v-model="switch2IP[3]" :rules="ipRules" label="Switch2 IP" required></v-text-field>
-                </v-col>
-            </v-row>
+                  <h5 class= "justify-center">Switch 1 IP</h5>
+                  <v-row>
+                      <v-col cols="3" md="3" v-for="(item,index) in switch1IP" :key="index" >
+                        <v-text-field  outlined v-model="switch1IP[index]" :rules="ipRules" label="0-255" placeholder = "0-255" required></v-text-field>
+                      </v-col>
+                </v-row>
+                <h5 class= "justify-center">Switch 2 IP</h5>
+                <v-row>
+                        <v-col cols="3" md="3" v-for="(item,index) in switch2IP" :key="index" >
+                          <v-text-field  outlined v-model="switch2IP[index]" :rules="ipRules" label="0-255" placeholder = "0-255" required></v-text-field>
+                        </v-col>
+                  </v-row>
               </v-container>
             </v-form>
 
@@ -87,11 +72,7 @@
 
     </v-dialog>
 
-
   </div>
-
-  
-
 
 
 </template>
@@ -135,8 +116,8 @@ export default {
 
           if(this.checkIPaddress(ipAddress1,ipAddress2) == true){
               // IP Address valid. Write IP Address to HDLAN Controller
-                  // console.log('ip1',ipAddress1)
-                  // console.log('ip2',ipAddress2)
+                   console.log('ip1',ipAddress1)
+                   console.log('ip2',ipAddress2)
           
               // Save switch config to server
               let sg350Config = {"ip1":"","ip2":"","onTime":"","offTime":""} //
@@ -154,17 +135,17 @@ export default {
                 console.log(error);
               })
 
-              // Close Vuetify Dialog
+              // Close Vuetify Dialog. Clear Admin Pass input
                 this.dialogLogin= false,
                 this.dialogIp= false
+                this.adminPass = ''
              
         
           }else{
             // IP Address Invalid. 
 
           }
-
-       
+      
         },
         checkIPaddress:function(_ipaddress1,_ipaddress2){
           const ip_pattern = /^(?=.*[^\.]$)((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.?){4}$/
@@ -182,5 +163,6 @@ export default {
 </script>
 
 <style scoped>
+
 
 </style>
