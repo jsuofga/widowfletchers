@@ -83,6 +83,7 @@ import axios from 'axios';
 export default {
 
     data: () => ({
+        expressURL:`${location.hostname}:3000`, // Express server and port
         adminPass: '',
         dialogLogin: false,
         dialogIp:false,
@@ -110,7 +111,7 @@ export default {
          
         },
         submit:function(){
-          let serverURL = `192.168.1.89`
+          
           let ipAddress1 = `${this.switch1IP[0]}.${this.switch1IP[1]}.${this.switch1IP[2]}.${this.switch1IP[3]}`
           let ipAddress2 = `${this.switch2IP[0]}.${this.switch2IP[1]}.${this.switch2IP[2]}.${this.switch2IP[3]}`
 
@@ -125,7 +126,7 @@ export default {
               sg350Config['ip2'] = ipAddress2
                 // console.log(sg350Config)
 
-              axios.get(`http://${serverURL}:3000/write/UserSwitchConfig/${JSON.stringify(sg350Config)}`)
+              axios.get(`http://${this.expressURL}/write/UserSwitchConfig/${JSON.stringify(sg350Config)}`)
               .then(function (response) {
                 // handle success
                 console.log(response);

@@ -20,7 +20,7 @@
               </v-col>
               <v-col @click= "allSelect" class= "d-flex justify-center"  cols = "6" sm ="3">
                   <div class = "roundBtn btn-large">
-                    <v-icon>mdi-all-inclusive</v-icon> 
+                    <v-icon color='white' class ="mx-1">mdi-all-inclusive</v-icon> 
                      ALL
                   </div>
               </v-col>
@@ -57,11 +57,12 @@ export default {
    name: 'Home',
    props:['zoneInfo','videoInputs'],
    data: () => ({
-    nodeRedUrl: `192.168.1.89:1880`,
+    nodeRedURL:`${location.hostname}:1880`,
     leftDrawer: false,
     zoneSelected:0,
     switch1RXPorts :[],
     switch2RXPorts :[],
+    connection: null  // websocket
   }),
   computed: {
     // a computed getter
@@ -108,7 +109,7 @@ export default {
       // console.log(`http://${this.nodeRedUrl}/switchAll/switch-unit/1/gi-start/${this.getSwitch1RxPorts[0].switch1RxStart}/gi-end/${this.getSwitch1RxPorts[1].switch1RxEnd}/vlan/${vlan}`)
       // console.log(`http://${this.nodeRedUrl}/switchAll/switch-unit/2/gi-start/${this.getSwitch2RxPorts[0].switch2RxStart}/gi-end/${this.getSwitch2RxPorts[1].switch2RxEnd}/vlan/${vlan}`)
 
-      axios.get(`http://${this.nodeRedUrl}/switchall-unit/1/start/${this.getSwitch1RxPorts[0].switch1RxStart}/end/${this.getSwitch1RxPorts[1].switch1RxEnd}/vlan/${vlan}`)
+      axios.get(`http://${this.nodeRedURL}/switchall-unit/1/start/${this.getSwitch1RxPorts[0].switch1RxStart}/end/${this.getSwitch1RxPorts[1].switch1RxEnd}/vlan/${vlan}`)
       .then(function (response) {
         // handle success
         console.log(response);
@@ -118,7 +119,7 @@ export default {
         console.log(error);
       })
 
-      axios.get(`http://${this.nodeRedUrl}/switchall-unit/2/start/${this.getSwitch2RxPorts[0].switch2RxStart}/end/${this.getSwitch2RxPorts[1].switch2RxEnd}/vlan/${vlan}`)
+      axios.get(`http://${this.nodeRedURL}/switchall-unit/2/start/${this.getSwitch2RxPorts[0].switch2RxStart}/end/${this.getSwitch2RxPorts[1].switch2RxEnd}/vlan/${vlan}`)
       .then(function (response) {
         // handle success
         console.log(response);
@@ -127,11 +128,11 @@ export default {
         // handle error
         console.log(error);
       })
-     
          
     }
 
-  }
+  },
+ 
 }
 
 </script>
@@ -151,8 +152,9 @@ export default {
    flex-direction: row;
    justify-content: center;
    align-items: center;
-   color: #745550;
-   border:5px solid #745550;
+   color: white;
+   /* border:5px solid #263238; */
+   background-color:#263238 ;
    font-size: 1.5rem;
    height:150px;
    width:150px;
@@ -160,7 +162,7 @@ export default {
 }
 .roundBtn:hover {
   color:white;
-  background-color:#745550 !important;
+  background-color: teal !important;
 }
 
 

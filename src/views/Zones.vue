@@ -3,7 +3,7 @@
    
       <v-container>
       <div id = 'zone-title' class= "mb-5"> 
-            <h1  class= "d-flex justify-center brown--text"> 
+            <h1  class= "d-flex justify-center  "> 
                {{zoneInfo[zoneSelected].name}}
             </h1>  
         </div>
@@ -11,7 +11,7 @@
       <div >
           <v-row id = "tv-buttons" justify= "start" >
               <v-col class= "d-flex justify-center  mb-3" cols = "4" sm ="2"  v-for="(item,index) in tvList" :key="index">
-                  <v-btn @click = "tv(index)" large dark color= "brown lighten-1" >
+                  <v-btn @click = "tv(index)" large dark color= "blue-grey darken-4" >
                         {{index+1}}
                   </v-btn>
         
@@ -49,7 +49,7 @@ export default {
    name: 'Zones',
    props:['zoneInfo','zoneSelected','videoInputs'],
    data: () => ({
-      nodeRedUrl: `192.168.1.89:1880`,
+      nodeRedURL:`${location.hostname}:1880`,
       leftDrawer : false,
       tvSelected: 0 // TV selected from zone. 0= first TV in zone, 1= 2nd TV in zone...
   }),
@@ -84,9 +84,9 @@ export default {
         // console.log(`zoneSelected is ` , this.zoneSelected)
         // console.log(`swich unit is ` ,switch_unit )
         // console.log(`gi port is ` ,gi_port )
-        console.log(`http://${this.nodeRedUrl}/switch-unit/${switch_unit}/rxport/${rxport}/vlan/${vlan}`)
+        console.log(`http://${this.nodeRedURL}/switch-unit/${switch_unit}/rxport/${rxport}/vlan/${vlan}`)
 
-        axios.get(`http://${this.nodeRedUrl}/switch-unit/${switch_unit}/rxport/${rxport}/vlan/${vlan}`)
+        axios.get(`http://${this.nodeRedURL}/switch-unit/${switch_unit}/rxport/${rxport}/vlan/${vlan}`)
         .then(function (response) {
             // handle success
             console.log(response);
