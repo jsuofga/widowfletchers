@@ -1,7 +1,7 @@
 <template>
 
     <nav>
-    <v-snackbar v-model="snackbar" top color = "success" :timeout= "5000">{{ textSnackbar }}
+    <v-snackbar v-model="snackbar" top color = "success" :timeout= "10000">{{ textSnackbar }}
 
       <template v-slot:action="{ attrs }">
         <v-btn
@@ -27,6 +27,7 @@
                 <v-spacer></v-spacer>
                 <DialogIpAddress /> 
                 <DialogFileUpdate @fileUpdated= "snackbar = true"/> 
+                
         </v-app-bar>
 
         <v-bottom-navigation absolute color ="blue-grey darken-4"  >
@@ -34,7 +35,7 @@
                 <span>Home</span>
                 <v-icon large>mdi-home</v-icon>
             </v-btn>
-            
+  
         </v-bottom-navigation>
     </nav>
     
@@ -53,7 +54,7 @@ export default {
         },
     data: () => ({
         nodeRedURL:`${location.hostname}:1880`,
-        controllerStatusFail: true, // Display error message if true
+        controllerStatusFail: false, // Display error message if true
         switchStatusFail: false, // Display error message if true
         snackbar:false,
         textSnackbar :'File updated!'

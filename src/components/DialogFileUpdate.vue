@@ -6,14 +6,15 @@
     <v-dialog v-model="dialogLogin" width="600">
       <template v-slot:activator="{ on, attrs }">
         <v-btn depressed text v-bind="attrs" v-on="on" class = "left" >
-            <v-icon >mdi-file-download</v-icon>
+            <v-icon >mdi-file-download-outline</v-icon>
         </v-btn>
       </template>
 
       <v-card>
             <v-card-title class="headline grey lighten-2 justify-center mb-10">
-              Admin Access 
+             File Update  
             </v-card-title>
+            <v-card-subtitle>Current Version is 5.6.21A</v-card-subtitle>
 
             <div class='mb-5'>
               <v-text-field label="Enter Admin User Name"
@@ -45,6 +46,7 @@
             <v-card-title class="headline grey lighten-2 justify-center mb-10">
               Update File
             </v-card-title>
+             <v-card-subtitle>only use dist.tar file provided by Octava</v-card-subtitle>
             <v-container>
                 <v-file-input
                     :rules="rules"

@@ -3,16 +3,18 @@
   <div class="text-center">
 
     <!-- Admin Login Dialog  -->
+  
     <v-dialog v-model="dialogLogin" width="600">
+ 
       <template v-slot:activator="{ on, attrs }">
-        <v-btn depressed text v-bind="attrs" v-on="on" class = "left" >
+        <v-btn depressed text v-bind="attrs" v-on="on" class = "left align-center" >
             <v-icon >mdi-server-network</v-icon>
         </v-btn>
       </template>
 
       <v-card>
             <v-card-title class="headline grey lighten-2 justify-center mb-10">
-              Admin Access 
+              Cisco Switch IP Address
             </v-card-title>
 
             <div class='mb-5'>
@@ -38,9 +40,10 @@
 
     </v-dialog>
 
+
     <!-- IP Address Dialog -->
     <v-dialog v-model="dialogIp" width="600">
-
+        
         <v-card>
             <v-card-title class="headline grey lighten-2 justify-center mb-10">
               Cisco Switch IP Address
@@ -83,6 +86,7 @@ import axios from 'axios';
 export default {
 
     data: () => ({
+      
         expressURL:`${location.hostname}:3000`, // Express server and port
         adminPass: '',
         dialogLogin: false,
@@ -110,7 +114,7 @@ export default {
           }
          
         },
-        submit:function(){
+        submit:function(){  // Writes IP address from client to server file
           
           let ipAddress1 = `${this.switch1IP[0]}.${this.switch1IP[1]}.${this.switch1IP[2]}.${this.switch1IP[3]}`
           let ipAddress2 = `${this.switch2IP[0]}.${this.switch2IP[1]}.${this.switch2IP[2]}.${this.switch2IP[3]}`
@@ -148,6 +152,7 @@ export default {
           }
       
         },
+
         checkIPaddress:function(_ipaddress1,_ipaddress2){
           const ip_pattern = /^(?=.*[^\.]$)((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.?){4}$/
           if (ip_pattern.test(_ipaddress1) && ip_pattern.test(_ipaddress2)) {  
@@ -158,7 +163,26 @@ export default {
           }
         }
         
-    }
+    },
+
+    //Lifecycle Hooks
+      mounted:function(){ // Read in IP address from server file  into to client
+            axios.get(`http://${this.expressURL}/read/UserSwitchConfig`)
+              .then( (response)=> {
+                // handle success
+                console.log(response)
+                //console.log(response.data.ip1.split("."))
+                this.switch1IP = [...response.data.ip1.split(".")]  // Reads in IP as "192.168.1.2" and seaprates in array as ["192", "168","1"."2"]
+                this.switch2IP = [...response.data.ip2.split(".")]  // Reads in IP as "192.168.1.2" and seaprates in array as ["192", "168","1"."2"]
+                
+              })
+              .catch( (error)=> {
+                // handle error
+                console.log(error);
+              })
+
+      },
+    
 }
 
 </script>
