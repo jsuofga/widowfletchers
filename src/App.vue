@@ -34,7 +34,9 @@ export default {
         {name: 'Tavern', switchUnit: '2', portStart:'1', portEnd:'18'},
         {name: 'Fletcher', switchUnit: '2', portStart:'21', portEnd:'40'},
       ],
-      videoInputs : ['dtv1','dtv2','apple tv'],
+      videoInputs : ['DTV1','DTV1','DTV3','DTV4','DTV5','DTV6','DTV7','DTV8',
+                    'Spectrum1','Spectrum2','Spectrum3','Spectrum4','Spectrum5','Spectrum6','Spectrum7','Spectrum8'
+                    ],
       zoneSelected: '',  //index of the zone selected.  0 = zone1, 1 = zone2...
       tvSelected:'',  //index of the tv selected.  0 = tv1, 1 = tv2...
    

@@ -1,6 +1,19 @@
 <template>
 
     <nav>
+    <v-snackbar v-model="snackbar" top color = "success" :timeout= "5000">{{ textSnackbar }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="white"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
         <v-app-bar app flat dark color ="blue-grey darken-4" >
             <v-img 
               src = '../assets/octava-logo-white.png'    
@@ -12,7 +25,8 @@
              <div v-if ="switchStatusFail" class = "red mx-5">Network Switches Not Detected </div>
              <div v-if ="controllerStatusFail" class = "red mx-5">HDLAN Controller Not Detected</div>
                 <v-spacer></v-spacer>
-                <DialogIpAddress />  
+                <DialogIpAddress /> 
+                <DialogFileUpdate @fileUpdated= "snackbar = true"/> 
         </v-app-bar>
 
         <v-bottom-navigation absolute color ="blue-grey darken-4"  >
@@ -20,6 +34,7 @@
                 <span>Home</span>
                 <v-icon large>mdi-home</v-icon>
             </v-btn>
+            
         </v-bottom-navigation>
     </nav>
     
@@ -28,16 +43,20 @@
 <script>
 
 import DialogIpAddress from '@/components/DialogIpAddress'
+import DialogFileUpdate from '@/components/DialogFileUpdate'
 import axios from 'axios'
 
 export default {
     components: {
-            DialogIpAddress
+            DialogIpAddress,
+            DialogFileUpdate
         },
     data: () => ({
         nodeRedURL:`${location.hostname}:1880`,
         controllerStatusFail: true, // Display error message if true
-        switchStatusFail: false // Display error message if true
+        switchStatusFail: false, // Display error message if true
+        snackbar:false,
+        textSnackbar :'File updated!'
     }),
     methods: {
       //Send get command to hdlan controller. If no response, then throw an error that HDLAN Controller not detected
