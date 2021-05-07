@@ -1,6 +1,6 @@
 <template>
    <div class="zones">
-   
+
       <v-container>
       <div id = 'zone-title' class= "mb-5"> 
             <h1  class= "d-flex justify-center  "> 
@@ -10,13 +10,12 @@
 
       <div >
           <v-row id = "tv-buttons" justify= "start" >
-              <v-col class= "d-flex justify-center  mb-3" cols = "4" sm ="2"  v-for="(item,index) in tvList" :key="index">
+              <v-col class= "d-flex flex-column justify-center align-center mb-3" cols = "4" sm ="2"  v-for="(item,index) in tvList" :key="index">
                   <v-btn @click = "tv(index)" large dark color= "blue-grey darken-4" >
                         {{index+1}}
                   </v-btn>
-        
+                  <span>{{sourceList[index]}}</span>
               </v-col>
-
           </v-row>
       </div>
 
@@ -29,7 +28,6 @@
                 </v-avatar>
                 <div class = "title ">Video Source Select</div>
             </div>
-
             <v-divider></v-divider>
              
             <v-list nav  >
@@ -47,11 +45,12 @@
 import axios from 'axios';
 export default {
    name: 'Zones',
-   props:['zoneInfo','zoneSelected','videoInputs'],
+   props:['zoneInfo','zoneSelected','videoInputs','vlanMembership'],
    data: () => ({
       nodeRedURL:`${location.hostname}:1880`,
-      leftDrawer : false,
-      tvSelected: 0 // TV selected from zone. 0= first TV in zone, 1= 2nd TV in zone...
+      leftDrawer: false,
+      tvSelected: 0 ,// TV selected from zone. 0= first TV in zone, 1= 2nd TV in zone...
+    //   sourceList: [] // list of source names that each TV in ZOne is switched to
   }),
 
   computed:{
@@ -65,19 +64,36 @@ export default {
         return tvs
     },
 
+    sourceList:function(){  // List the names of the sources each TV is switched to Ex. ['dtv1', 'sepectrum1'....]
+        // this.sourceList = []
+        let inputs=[]
+        let switchUnitSelected = this.zoneInfo[this.zoneSelected].switchUnit
+        let firstPortofZone =  this.zoneInfo[this.zoneSelected].portStart
+        let lastPortofZone =  this.zoneInfo[this.zoneSelected].portEnd
+        let vlans = []  // list of video sources that TV are currently swithed to 
+        console.log('vlanMembership x ', this.vlanMembership[`vlansSwitch${switchUnitSelected}`])
+        vlans = this.vlanMembership[`vlansSwitch${switchUnitSelected}`].slice(firstPortofZone-1,lastPortofZone)
+        console.log('vlans', vlans)
+
+        // Assign actual Video Input Names to each vlan
+         vlans.forEach((item,index)=>{
+             inputs.push(this.videoInputs[item-2]) 
+         })
+        return inputs
+    },
 
   },
   methods: {
+
    tv: function(_index) {
       // Open Video Input Select Left Drawer
        this.leftDrawer = true
       // TV selected from zone. 0= first TV in zone, 1= 2nd TV in zone...
        this.tvSelected = _index
       // Pass message to App.vue to Open Video Input Left Drawer. 
-        this.$emit('tvSelectedIndex', _index)
+        this.$emit('message-tvSelectedIndex', _index)
     },
     switchVideo: function(_index){
-     
         let vlan = _index + 2
         let switch_unit = this.zoneInfo[this.zoneSelected].switchUnit
         let rxport = parseInt(this.zoneInfo[this.zoneSelected].portStart) + this.tvSelected
@@ -95,10 +111,9 @@ export default {
             // handle error
             console.log(error);
         })
-
     }
-
-  }
+  },
+ 
 }
 
 </script>
@@ -111,12 +126,6 @@ export default {
   width: 100%;
   height:65vh;
   /* border:1px solid red ; */
-}
-#zone-title{
-    /* border: 1px solid red */
-}
-#tv-buttons{
-    /* border: 1px solid blue */
 }
 
 

@@ -56,6 +56,7 @@ export default {
         nodeRedURL:`${location.hostname}:1880`,
         controllerStatusFail: false, // Display error message if true
         switchStatusFail: false, // Display error message if true
+        vlanMembership:{vlansSwitch1:[],vlansSwitch2:[]},   //
         snackbar:false,
         textSnackbar :'File updated!'
     }),
@@ -80,11 +81,22 @@ export default {
     },
     created: function() {
        
-        // Web Socket Connection 
+        // Web Socket Connection. To get updated switchstatus
         console.log("Starting connection to WebSocket Server")
         let connection = new WebSocket(`ws://${this.nodeRedURL}/ws/switchstatus`)
         connection.onmessage = (event) => {
-            //console.log(event.data);
+             let switch1_vlans = JSON.parse(event.data).switch1_vlans  //convert strings to objects
+             let switch2_vlans = JSON.parse(event.data).switch2_vlans
+           
+            //  console.log(event.data);
+              console.log('test',switch1_vlans)
+              console.log('test',switch2_vlans)
+            // console.log('vlanMembership',this.vlanMembership)
+             this.vlanMembership.vlansSwitch1 =[...switch1_vlans]
+             this.vlanMembership.vlansSwitch2 =[...switch2_vlans]
+             this.$emit('message-vlanMembership',this.vlanMembership)
+
+          
             // Check if switch1status , switch2status = fail
             if(Object.values(JSON.parse(event.data)).includes("fail")){
                     this.switchStatusFail = true

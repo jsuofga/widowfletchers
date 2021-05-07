@@ -6,7 +6,7 @@
     <v-dialog v-model="dialogLogin" width="600">
       <template v-slot:activator="{ on, attrs }">
         <v-btn depressed text v-bind="attrs" v-on="on" class = "left" >
-            <v-icon >mdi-file-download-outline</v-icon>
+            <v-icon >mdi-download</v-icon>
         </v-btn>
       </template>
 
@@ -14,7 +14,7 @@
             <v-card-title class="headline grey lighten-2 justify-center mb-10">
              File Update  
             </v-card-title>
-            <v-card-subtitle>Current Version is 5.6.21A</v-card-subtitle>
+            <v-card-subtitle>Current Version is 5.7.21</v-card-subtitle>
 
             <div class='mb-5'>
               <v-text-field label="Enter Admin User Name"
@@ -137,6 +137,7 @@ export default {
               //alert('update request received')
               this.dialogFileUpdate = false  //close dialog 
               this.$emit('fileUpdated')
+              this.$router.push({name:'Home'})
               location.reload()  // reload page to update
               
             } else {

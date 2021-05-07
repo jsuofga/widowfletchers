@@ -90,13 +90,13 @@ export default {
   methods: {
    zoneSelect: function(_index) {
       let zoneSelected = _index
-      this.$emit('zoneSelected', zoneSelected)
+      this.$emit('message-zoneSelected', zoneSelected)
       this.$router.push('/zones')
   
     },
     allSelect: function() {
        let zoneSelected = 'all'
-       this.$emit('zoneSelected', zoneSelected)
+       this.$emit('message-zoneSelected', zoneSelected)
        this.leftDrawer = true
     },
     switchAll: function(_index){
