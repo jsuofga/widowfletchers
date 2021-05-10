@@ -7,6 +7,7 @@
       <template v-slot:activator="{ on, attrs }">
         <v-btn depressed text v-bind="attrs" v-on="on" class = "left" >
             <v-icon >mdi-download</v-icon>
+        
         </v-btn>
       </template>
 
